@@ -48,11 +48,16 @@ module.exports = {
           ? res.status(404).json({ message: 'You cannot delete this thought because this ID does not exist.' })
           : User.findOneAndUpdate(
             { thoughts: req.params.thoughtId },
-            { $pull: { thoughts: { req.params.thoughtId } } },
+            { $pull: { thoughts: req.params.thoughtId  } },
             { new: true }
             )
       )
       .then((user) => 
+      !user
+      ? res.status(404).json({ message: "Though the user does not exist, the thought was deleted."})
+      :res.json({ message: "This user's thought has been deleted." })
+      )
+      .catch((err) => res.status(500).json(err));
     },
 
     addReaction(req, res) {
