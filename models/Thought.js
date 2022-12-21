@@ -1,5 +1,5 @@
 const moment = require('moment');
-const { Schema, model } = require('mongoose');
+const { Schema, model, Types } = require('mongoose');
 // const { Thought } = require('.');
 // const formatDate = require('../utils/formatDate');
 
