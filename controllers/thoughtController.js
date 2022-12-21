@@ -8,7 +8,7 @@ module.exports = {
     },
 
     getSingleThought(req, res) {
-        Thought.findOne({ _id: req.params.thoughtId })
+        Thought.findOne({ _id: req.params.id })
         .select('-__v')
         .then((thought) =>
         !thought
@@ -29,7 +29,7 @@ module.exports = {
 
     updateThought(req, res) {
         Thought.findOneAndUpdate(
-            { _id: req.params.thoughtId },
+            { _id: req.params.id },
             { $set: req.body },
             { runValidators: true, new: true}
         ) 
@@ -42,19 +42,19 @@ module.exports = {
     },
 
     deleteThought(req, res) {
-        Thought.findOneAndDelete({ _id: req.params.thoughtId })
+        Thought.findOneAndDelete({ _id: req.params.id })
         .then((thought) =>
         !thought
           ? res.status(404).json({ message: 'You cannot delete this thought because this ID does not exist.' })
-          : User.findOneAndUpdate(
-            { thoughts: req.params.thoughtId },
-            { $pull: { thoughts: req.params.thoughtId  } },
-            { new: true }
-            )
-      )
-      .then((user) => 
-      !user
-      ? res.status(404).json({ message: "Though the user does not exist, the thought was deleted."})
+    //       : User.findOneAndUpdate(
+    //         { thoughts: req.params.id },
+    //         { $pull: { thoughts: req.params.id } },
+    //         { runValidators: true,  new: true }
+    //         )
+    //   )
+    //   .then((user) => 
+    //   !user
+    //   ? res.status(404).json({ message: "Though the user does not exist, the thought was deleted."})
       :res.json({ message: "This user's thought has been deleted." })
       )
       .catch((err) => res.status(500).json(err));
@@ -75,7 +75,7 @@ module.exports = {
     },
 
     deleteReaction(req, res) {
-        Thought.findOneAndDelete(
+        Thought.findOneAndUpdate(
             { _id: req.params.thoughtId },
             { $pull: { reactions: {reactionId: req.body.reactionId} } },
             { runValidators: true, new: true }
