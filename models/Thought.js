@@ -1,5 +1,6 @@
 const moment = require('moment');
 const { Schema, model } = require('mongoose');
+// const { Thought } = require('.');
 // const formatDate = require('../utils/formatDate');
 
 const thoughtSchema = new Schema(
@@ -65,4 +66,4 @@ const reactionSchema = new Schema(
 
 const Schema = model('Thought', thoughtSchema);
 
-module.exports = thoughtSchema;
+module.exports = Thought;
