@@ -1,4 +1,4 @@
-const { User } = require('../models/');
+const { User, Thought } = require('../models/');
 
 module.exports = {
 
@@ -43,7 +43,14 @@ module.exports = {
     },
 
     deleteUser(req, res) {
-        
+        User.findOneAndDelete({ _id: req.params.userId })
+        .then((user) =>
+        !user
+          ? res.status(404).json({ message: 'You cannot delete this user because this ID does not exist.' })
+          : Student.deleteMany({ _id: { $in: course.students } })
+      )
+      .then(() => res.json({ message: 'Course and students deleted!' }))
+      .catch((err) => res.status(500).json(err));
     },
 
     addFriend(req, res) {
