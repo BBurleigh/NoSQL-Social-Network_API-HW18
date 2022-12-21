@@ -9,7 +9,7 @@ module.exports = {
     },
 
     getOneUser(req, res) {
-        User.findOne({ _id: req.params.userId })
+        User.findOne({ _id: req.params.id })
         .select('-__v')
         .then((user) =>
         !user
@@ -30,7 +30,7 @@ module.exports = {
 
     updateUser(req, res) {
         User.findOneAndUpdate(
-            { _id: req.params.userId },
+            { _id: req.params.id },
             { $set: req.body },
             { runValidators: true, new: true}
         ) 
@@ -43,7 +43,7 @@ module.exports = {
     },
 
     deleteUser(req, res) {
-        User.findOneAndDelete({ _id: req.params.userId })
+        User.findOneAndDelete({ _id: req.params.id })
         .then((user) =>
         !user
           ? res.status(404).json({ message: 'You cannot delete this user because this ID does not exist.' })
@@ -71,7 +71,7 @@ module.exports = {
         User.findOneAndDelete(
             { _id: req.params.userId },
             { $pull: { friends: req.params.friendId } },
-            { new: true }
+            { runValidators: true, new: true }
         )
         .then((user) =>
         !user
