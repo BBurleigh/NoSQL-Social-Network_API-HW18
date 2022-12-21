@@ -61,10 +61,30 @@ module.exports = {
     },
 
     addReaction(req, res) {
-
+        Thought.findOneAndUpdate(
+            { _id: req.params.thoughtId },
+            { $addToSet: { reactions: req.body } },
+            { runValidators: true, new: true }
+        )
+        .then((thought) =>
+        !thought
+        ? res.status(404).json({ message: "You cannot add a reaction to this thought since the thought's id does not exist." })
+        : res.json(thought)
+        )
+        .catch((err) => res.status(500).json(err));
     },
 
     deleteReaction(req, res) {
-
+        Thought.findOneAndDelete(
+            { _id: req.params.thoughtId },
+            { $pull: { reactions: {reactionId: req.body.reactionId} } },
+            { runValidators: true, new: true }
+        )
+        .then((thought) =>
+        !thought
+        ? res.status(404).json({ message: "You cannot delete this reactions because its ID does not exist." })
+        : res.json(thought)
+        )
+        .catch((err) => res.status(500).json(err));
     }
 };
